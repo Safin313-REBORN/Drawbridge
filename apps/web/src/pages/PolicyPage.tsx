@@ -166,23 +166,47 @@ export function PolicyPage() {
                 id="policy-yaml-editor"
                 data-testid="policy-editor"
                 className="policy-textarea"
+                aria-invalid={!validation.ok}
                 value={policyYaml}
                 onChange={(e) => setPolicyYaml(e.target.value)}
                 spellCheck={false}
               />
+              {!validation.ok && (
+                <div
+                  role="alert"
+                  style={{
+                    padding: "12px 22px",
+                    background: "var(--tsig)",
+                    color: "var(--sigt)",
+                    borderTop: "2px solid var(--sig)",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: 13,
+                  }}
+                >
+                  {validation.errors.map((err, i) => (
+                    <div key={i}>{err}</div>
+                  ))}
+                </div>
+              )}
             </div>
           ) : (
             <div style={{ flex: 1, padding: 22 }}>
               <div className="lab" style={{ color: "var(--mute)", marginBottom: 12 }}>
                 Trusted contacts in policy
               </div>
-              <ul style={{ margin: 0, paddingLeft: 20, fontFamily: "var(--font-mono)", fontSize: 15 }}>
-                {contactsList.map((c) => (
-                  <li key={c} style={{ marginBottom: 8 }}>
-                    {c}
-                  </li>
-                ))}
-              </ul>
+              {contactsList.length === 0 ? (
+                <p style={{ color: "var(--mute)", margin: 0 }}>
+                  No trusted contacts configured in this policy.
+                </p>
+              ) : (
+                <ul style={{ margin: 0, paddingLeft: 20, fontFamily: "var(--font-mono)", fontSize: 15 }}>
+                  {contactsList.map((c) => (
+                    <li key={c} style={{ marginBottom: 8 }}>
+                      {c}
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           )}
 

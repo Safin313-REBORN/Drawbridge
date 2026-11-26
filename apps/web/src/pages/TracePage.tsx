@@ -93,7 +93,28 @@ export function TracePage() {
               </button>
             ))}
           </div>
-          {filteredRuns.map((run) => {
+          {runs.length === 0 ? (
+            <div className="card" style={{ padding: 16 }}>
+              <span className="lab" style={{ color: "var(--stone)" }}>
+                Loading runs...
+              </span>
+            </div>
+          ) : filteredRuns.length === 0 ? (
+            <div className="card" style={{ padding: 16 }}>
+              <div className="lab" style={{ color: "var(--stone)" }}>
+                No runs match "{filter}"
+              </div>
+              <button
+                type="button"
+                className="btn btn-s"
+                style={{ marginTop: 12, width: "100%" }}
+                onClick={() => setFilter("all")}
+              >
+                Show all runs
+              </button>
+            </div>
+          ) : (
+            filteredRuns.map((run) => {
             const isSel = activeRun?.id === run.id;
             const statusBdg =
               run.summary.status === "blocked"
@@ -125,7 +146,8 @@ export function TracePage() {
                 </div>
               </button>
             );
-          })}
+          })
+          )}
           <div style={{ flex: 1 }} />
           <div
             className="lab"

@@ -1101,9 +1101,17 @@ export function LandingPage() {
             <span className="lab" style={{ color: "var(--mute)" }}>
               Made for GenHacks 2026 &middot; Open source
             </span>
-            <span className="lab" style={{ color: "var(--mute)" }}>
-              AI tools used are listed in the README
-            </span>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
+              <Link className="lab" to="/privacy" style={{ color: "var(--mute)" }}>
+                Privacy
+              </Link>
+              <Link className="lab" to="/terms" style={{ color: "var(--mute)" }}>
+                Terms
+              </Link>
+              <span className="lab" style={{ color: "var(--mute)" }}>
+                AI tools used are listed in the README
+              </span>
+            </div>
           </div>
         </div>
       </footer>

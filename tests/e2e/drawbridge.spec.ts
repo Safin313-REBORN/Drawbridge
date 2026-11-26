@@ -74,7 +74,7 @@ test.describe("Drawbridge E2E", () => {
   });
 
   test("Every internal link resolves cleanly on all pages", async ({ page }) => {
-    for (const route of ["/", "/trace", "/lab", "/policy"]) {
+    for (const route of ["/", "/trace", "/lab", "/policy", "/privacy", "/terms"]) {
       await page.goto(route);
       const hrefs = await page.locator("a[href]").evaluateAll((els) =>
         els.map((el) => el.getAttribute("href")).filter(Boolean)
@@ -90,5 +90,10 @@ test.describe("Drawbridge E2E", () => {
         }
       }
     }
+  });
+
+  test("Custom 404 page renders on unknown routes", async ({ page }) => {
+    await page.goto("/this-route-does-not-exist");
+    await expect(page.getByText("This gate does not exist.")).toBeVisible();
   });
 });
