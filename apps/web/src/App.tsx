@@ -20,6 +20,12 @@ const PrivacyPage = lazy(() =>
 const TermsPage = lazy(() =>
   import("./pages/TermsPage.js").then((m) => ({ default: m.TermsPage }))
 );
+const CookiePolicyPage = lazy(() =>
+  import("./pages/CookiePolicyPage.js").then((m) => ({ default: m.CookiePolicyPage }))
+);
+const RefundPage = lazy(() =>
+  import("./pages/RefundPage.js").then((m) => ({ default: m.RefundPage }))
+);
 const NotFoundPage = lazy(() =>
   import("./pages/NotFoundPage.js").then((m) => ({ default: m.NotFoundPage }))
 );
@@ -47,6 +53,8 @@ export function App() {
               <Route path="/policy" element={<PolicyPage />} />
               <Route path="/privacy" element={<PrivacyPage />} />
               <Route path="/terms" element={<TermsPage />} />
+              <Route path="/cookies" element={<CookiePolicyPage />} />
+              <Route path="/refund" element={<RefundPage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </Suspense>

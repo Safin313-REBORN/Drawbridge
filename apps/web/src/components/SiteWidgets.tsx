@@ -170,6 +170,7 @@ export function FloatingContactButton() {
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const [consent, setConsent] = useState(false);
   const [error, setError] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
@@ -181,6 +182,10 @@ export function FloatingContactButton() {
     }
     if (message.trim().length < 5) {
       setError("Please enter a message (at least 5 characters).");
+      return;
+    }
+    if (!consent) {
+      setError("Please confirm the consent and age (13+) checkbox.");
       return;
     }
     setError("");
@@ -276,6 +281,19 @@ export function FloatingContactButton() {
                     placeholder="Share feedback or a payload idea..."
                     required
                   />
+                </div>
+                <div>
+                  <label style={{ display: "flex", alignItems: "flex-start", gap: 10, fontSize: 13, cursor: "pointer" }}>
+                    <input
+                      type="checkbox"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      style={{ width: 20, height: 20, marginTop: 2 }}
+                    />
+                    <span>
+                      I consent to local-only form processing and confirm I am 13 years of age or older.
+                    </span>
+                  </label>
                 </div>
                 <button type="submit" className="btn btn-p">
                   Send message

@@ -1207,6 +1207,12 @@ export function LandingPage() {
               <Link className="lab" to="/terms" style={{ color: "var(--mute)" }}>
                 Terms
               </Link>
+              <Link className="lab" to="/cookies" style={{ color: "var(--mute)" }}>
+                Cookies
+              </Link>
+              <Link className="lab" to="/refund" style={{ color: "var(--mute)" }}>
+                Refunds
+              </Link>
               <span className="lab" style={{ color: "var(--mute)" }}>
                 AI tools used are listed in the README
               </span>

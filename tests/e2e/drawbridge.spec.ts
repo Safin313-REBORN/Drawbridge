@@ -74,7 +74,7 @@ test.describe("Drawbridge E2E", () => {
   });
 
   test("Every internal link resolves cleanly on all pages", async ({ page }) => {
-    for (const route of ["/", "/trace", "/lab", "/policy", "/privacy", "/terms"]) {
+    for (const route of ["/", "/trace", "/lab", "/policy", "/privacy", "/terms", "/cookies", "/refund"]) {
       await page.goto(route);
       const hrefs = await page.locator("a[href]").evaluateAll((els) =>
         els.map((el) => el.getAttribute("href")).filter(Boolean)
@@ -108,7 +108,7 @@ test.describe("Drawbridge E2E", () => {
       errors.push(err.message);
     });
 
-    for (const route of ["/", "/trace", "/lab", "/policy", "/privacy", "/terms"]) {
+    for (const route of ["/", "/trace", "/lab", "/policy", "/privacy", "/terms", "/cookies", "/refund"]) {
       await page.goto(route);
       await expect(page.locator("h1")).toHaveCount(1);
     }
