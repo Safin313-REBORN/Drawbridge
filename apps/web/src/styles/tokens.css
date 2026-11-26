@@ -1,0 +1,11 @@
+:root{
+  --bone:#EDE8DC;--bone2:#F7F4EC;--ink:#0F1412;--ink2:#1C2420;--steel:#CFCABB;--stone:#565D56;--mute:#A9B0A8;
+  --sig:#FF5B1F;--sigt:#B83400;--clr:#1F7A5A;--clrt:#17624A;--cau:#F2C230;
+  --tsig:#FFD3C0;--tclr:#C6E3D6;--tcau:#F8E7A6;
+  --font-display:'Big Shoulders Display','Archivo Narrow',Impact,sans-serif;
+  --font-body:'Schibsted Grotesk',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',ui-monospace,monospace;
+  --outline:2px solid var(--ink);
+  --shadow-sm:4px 4px 0 var(--ink);--shadow-md:5px 5px 0 var(--ink);--shadow-sig:4px 4px 0 var(--sig);
+  --ease:cubic-bezier(.2,.8,.2,1);
+}

@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawbridge policy editor</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDE8DC}
+:root{--bone:#EDE8DC;--bone2:#F7F4EC;--ink:#0F1412;--ink2:#1C2420;--steel:#CFCABB;--stone:#565D56;--mute:#A9B0A8;--sig:#FF5B1F;--sigt:#B83400;--clr:#1F7A5A;--clrt:#17624A;--cau:#F2C230;--tsig:#FFD3C0;--tclr:#C6E3D6;--tcau:#F8E7A6}
+.app{width:1440px;height:900px;display:flex;flex-direction:column;font-family:'Schibsted Grotesk',system-ui,sans-serif;color:var(--ink);background:var(--bone);font-size:16px;line-height:1.5;overflow:hidden}
+.app *{box-sizing:border-box}
+.app a{color:inherit;text-decoration:none}
+.disp{font-family:'Big Shoulders Display','Archivo Narrow',Impact,sans-serif;font-weight:800;line-height:.94;text-transform:uppercase;margin:0}
+.lab{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.top{height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:2px solid var(--ink);background:var(--bone2)}
+.body{flex:1;display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);min-height:0}
+.edit{background:var(--ink);color:var(--bone2);display:flex;flex-direction:column;min-width:0}
+.tabs{display:flex;border-bottom:1px solid #3A4540}
+.tab{padding:14px 22px;font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--mute);border-right:1px solid #3A4540}
+.tab.sel{background:var(--ink2);color:var(--bone2);box-shadow:inset 0 -3px 0 var(--sig)}
+.ln{display:grid;grid-template-columns:48px minmax(0,1fr);font-family:'JetBrains Mono',monospace;font-size:16px;line-height:30px;white-space:pre}
+.ln span:first-child{color:#6B766F;text-align:right;padding-right:16px;user-select:none}
+.ln.add{background:rgba(31,122,90,.38)}
+.ln.add span:first-child{color:#C6E3D6}
+.k{color:#7FD1B0}.s{color:#F6C177}.c{color:#7F8A83}.r{color:#FF9B73}
+.val{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 22px;border-top:1px solid #3A4540;background:var(--ink2)}
+.right{padding:26px 32px;display:flex;flex-direction:column;gap:20px;overflow:hidden;background:var(--bone)}
+.bdg{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;padding:4px 8px;border:2px solid var(--ink);border-radius:2px;white-space:nowrap;line-height:14px}
+.bdg.ok{background:var(--clr);color:var(--bone2)}.bdg.no{background:var(--sig);color:var(--ink)}.bdg.ask{background:var(--cau);color:var(--ink)}.bdg.nt{background:var(--bone2);color:var(--ink)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 20px;border:2px solid var(--ink);border-radius:2px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit;transition:transform .15s cubic-bezier(.2,.8,.2,1),box-shadow .15s}
+.btn-p{background:var(--ink);color:var(--bone2);box-shadow:4px 4px 0 var(--sig)}
+.btn-p:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sig)}
+.btn-s{background:var(--bone2);color:var(--ink)}
+.btn-s:hover{background:var(--tcau)}
+.dark-btn{background:var(--sig);color:var(--ink);border-color:var(--sig)}
+.row{display:grid;grid-template-columns:90px minmax(0,1fr) 26px minmax(0,1fr) 70px;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--steel);background:var(--bone2)}
+.card{border:2px solid var(--ink);background:var(--bone2)}
+.app a:focus-visible,.app button:focus-visible{outline:3px solid var(--cau);outline-offset:2px}
+.rise{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}
+.ln{animation:type .35s cubic-bezier(.2,.8,.2,1) both}
+.ln:nth-child(1){animation-delay:.05s}.ln:nth-child(2){animation-delay:.1s}.ln:nth-child(3){animation-delay:.15s}.ln:nth-child(4){animation-delay:.2s}.ln:nth-child(5){animation-delay:.25s}.ln:nth-child(6){animation-delay:.3s}.ln:nth-child(7){animation-delay:.35s}.ln:nth-child(8){animation-delay:.4s}.ln:nth-child(9){animation-delay:.45s}.ln:nth-child(10){animation-delay:.5s}.ln:nth-child(11){animation-delay:.55s}.ln:nth-child(12){animation-delay:.6s}.ln:nth-child(13){animation-delay:.65s}.ln:nth-child(14){animation-delay:.7s}
+.pulse{animation:pulse 2.4s ease-in-out infinite 1.2s}
+.row.n1{animation:rise .5s both .9s}.row.n2{animation:rise .5s both 1s}.row.n3{animation:rise .5s both 1.1s}.row.n4{animation:rise .5s both 1.2s}.row.n5{animation:rise .5s both 1.35s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes type{from{opacity:0;transform:translateX(-10px)}to{opacity:1;transform:none}}
+@keyframes pulse{0%,100%{background:rgba(31,122,90,.38)}50%{background:rgba(31,122,90,.6)}}
+@media (prefers-reduced-motion:reduce){.app *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="app">
+
+<header class="top">
+  <div style="display:flex;align-items:center;gap:28px">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px" aria-label="Drawbridge home">
+      <svg width="30" height="30" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M4 33V11h6V6h5v5h6V6h5v5h6V33z" fill="#F7F4EC" stroke="#0F1412" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 33V24a5 5 0 0 1 10 0V33z" fill="#FF5B1F" stroke="#0F1412" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      <span class="disp" style="font-size:26px">Drawbridge</span>
+    </a>
+    <span class="lab" style="color:#565D56">Policy / inbox-assistant</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="btn btn-s" href="Trace.dc.html" style="min-height:44px">Live trace</a>
+    <a class="btn btn-s" href="Lab.dc.html" style="min-height:44px">Attack lab</a>
+  </div>
+</header>
+
+<div class="body">
+  <section class="edit" aria-label="Policy editor">
+    <div class="tabs"><span class="tab sel">policy.yml</span><span class="tab">contacts.yml</span></div>
+    <div style="flex:1;padding:18px 0;overflow:hidden">
+      <div class="ln"><span>1</span><span><span class="k">policy:</span> inbox-assistant</span></div>
+      <div class="ln"><span>2</span><span><span class="k">default:</span> <span class="s">ask</span></span></div>
+      <div class="ln"><span>3</span><span><span class="k">rules:</span></span></div>
+      <div class="ln"><span>4</span><span>  - <span class="k">allow:</span> [read_email, summarize]</span></div>
+      <div class="ln"><span>5</span><span>  - <span class="k">deny:</span> send_email</span></div>
+      <div class="ln"><span>6</span><span>    <span class="k">when:</span> context.tainted</span></div>
+      <div class="ln"><span>7</span><span>      <span class="r">and</span> args.to <span class="r">not in</span> contacts</span></div>
+      <div class="ln"><span>8</span><span>    <span class="k">id:</span> deny-egress-tainted</span></div>
+      <div class="ln"><span>9</span><span>  - <span class="k">ask:</span> delete_file</span></div>
+      <div class="ln add pulse"><span>+10</span><span>  - <span class="k">deny:</span> run_shell</span></div>
+      <div class="ln add pulse"><span>+11</span><span>    <span class="k">when:</span> context.tainted</span></div>
+      <div class="ln add pulse"><span>+12</span><span>    <span class="k">id:</span> deny-shell-tainted</span></div>
+      <div class="ln"><span>13</span><span></span></div>
+      <div class="ln"><span>14</span><span><span class="c"># anything else asks a human first</span></span></div>
+    </div>
+    <div class="val">
+      <span style="display:flex;align-items:center;gap:12px"><span class="bdg ok">Valid</span><span class="mono" style="font-size:13px;color:#A9B0A8">4 rules &middot; 0 warnings &middot; 1 unsaved change</span></span>
+      <span style="display:flex;gap:10px"><button class="btn btn-s" style="min-height:44px">Revert</button><button class="btn dark-btn" style="min-height:44px">Save policy</button></span>
+    </div>
+  </section>
+
+  <section class="right" aria-label="Dry-run against past runs">
+    <div class="rise" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px">
+      <div>
+        <div class="lab" style="color:#565D56">Dry-run</div>
+        <h1 class="disp" style="font-size:46px;margin-top:6px">Replay past runs under this policy</h1>
+      </div>
+    </div>
+    <div class="rise d1" style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px">
+      <div class="card" style="padding:14px 16px;box-shadow:4px 4px 0 var(--clr)"><span class="lab" style="color:#17624A">Would change</span><div class="disp" style="font-size:48px;margin-top:6px">1</div></div>
+      <div class="card" style="padding:14px 16px;box-shadow:4px 4px 0 var(--ink)"><span class="lab">Newly blocked normal</span><div class="disp" style="font-size:48px;margin-top:6px">0</div></div>
+      <div class="card" style="padding:14px 16px;box-shadow:4px 4px 0 var(--cau)"><span class="lab">Attacks stopped</span><div class="disp" style="font-size:48px;margin-top:6px">37 &rarr; 38</div></div>
+    </div>
+
+    <div class="card rise d2" style="overflow:hidden">
+      <div class="row" style="background:var(--ink);color:var(--bone2);border-top:none"><span class="lab">Run</span><span class="lab">Before</span><span></span><span class="lab">After</span><span class="lab">Change</span></div>
+      <div class="row n1"><span class="mono" style="font-size:14px">#42</span><span><span class="bdg no">Blocked</span></span><span aria-hidden="true">&rarr;</span><span><span class="bdg no">Blocked</span></span><span class="lab" style="color:#565D56">Same</span></div>
+      <div class="row n2"><span class="mono" style="font-size:14px">#41</span><span><span class="bdg ok">Allowed</span></span><span aria-hidden="true">&rarr;</span><span><span class="bdg ok">Allowed</span></span><span class="lab" style="color:#565D56">Same</span></div>
+      <div class="row n3"><span class="mono" style="font-size:14px">#40</span><span><span class="bdg ask">Asked</span></span><span aria-hidden="true">&rarr;</span><span><span class="bdg ask">Asked</span></span><span class="lab" style="color:#565D56">Same</span></div>
+      <div class="row n4"><span class="mono" style="font-size:14px">A-023</span><span><span class="bdg ask">Asked</span></span><span aria-hidden="true">&rarr;</span><span><span class="bdg no">Blocked</span></span><span class="lab" style="color:#17624A">Better</span></div>
+      <div class="row n5"><span class="mono" style="font-size:14px">#39</span><span><span class="bdg ok">Allowed</span></span><span aria-hidden="true">&rarr;</span><span><span class="bdg ok">Allowed</span></span><span class="lab" style="color:#565D56">Same</span></div>
+    </div>
+
+    <div class="rise d3" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <button class="btn btn-p">Run dry-run again</button>
+      <a class="btn btn-s" href="Lab.dc.html">Test in the attack lab</a>
+    </div>
+    <p class="rise d3" style="margin:0;font-size:14px;line-height:21px;color:#565D56">Sample data for the design. A dry-run never touches a live agent: it replays recorded runs through the new rules and shows the difference.</p>
+  </section>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

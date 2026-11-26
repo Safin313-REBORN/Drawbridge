@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawbridge attack lab</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDE8DC}
+:root{--bone:#EDE8DC;--bone2:#F7F4EC;--ink:#0F1412;--ink2:#1C2420;--steel:#CFCABB;--stone:#565D56;--mute:#A9B0A8;--sig:#FF5B1F;--sigt:#B83400;--clr:#1F7A5A;--clrt:#17624A;--cau:#F2C230;--tsig:#FFD3C0;--tclr:#C6E3D6;--tcau:#F8E7A6}
+.app{width:1440px;height:900px;display:flex;flex-direction:column;font-family:'Schibsted Grotesk',system-ui,sans-serif;color:var(--ink);background:var(--bone);font-size:16px;line-height:1.5;overflow:hidden}
+.app *{box-sizing:border-box}
+.app a{color:inherit;text-decoration:none}
+.disp{font-family:'Big Shoulders Display','Archivo Narrow',Impact,sans-serif;font-weight:800;line-height:.94;text-transform:uppercase;margin:0}
+.lab{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.top{height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:2px solid var(--ink);background:var(--bone2)}
+.body{flex:1;display:grid;grid-template-columns:300px minmax(0,1fr);min-height:0}
+.side{border-right:2px solid var(--ink);padding:24px 20px;display:flex;flex-direction:column;gap:16px}
+.cat{display:flex;justify-content:space-between;align-items:center;min-height:44px;padding:8px 12px;border:2px solid transparent;border-radius:2px;cursor:pointer;background:none;font:inherit;color:inherit;width:100%;text-align:left}
+.cat:hover{background:var(--bone2)}
+.cat.sel{background:var(--bone2);border-color:var(--ink);box-shadow:4px 4px 0 var(--sig)}
+.main{padding:26px 32px;display:flex;flex-direction:column;gap:22px;overflow:hidden}
+.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.stat{border:2px solid var(--ink);background:var(--bone2);padding:16px 18px;box-shadow:5px 5px 0 var(--ink)}
+.stat b{display:block;font-family:'Big Shoulders Display',Impact,sans-serif;font-weight:800;font-size:64px;line-height:1;margin-top:6px}
+.bdg{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;padding:4px 8px;border:2px solid var(--ink);border-radius:2px;white-space:nowrap;line-height:14px}
+.bdg.ok{background:var(--clr);color:var(--bone2)}.bdg.no{background:var(--sig);color:var(--ink)}.bdg.ask{background:var(--cau);color:var(--ink)}
+table{width:100%;border-collapse:collapse;background:var(--bone2);border:2px solid var(--ink)}
+th{text-align:left;padding:10px 16px;background:var(--ink);color:var(--bone2);font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+td{padding:11px 16px;border-top:1px solid var(--steel);font-size:15px}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 20px;border:2px solid var(--ink);border-radius:2px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit;transition:transform .15s cubic-bezier(.2,.8,.2,1),box-shadow .15s}
+.btn-p{background:var(--ink);color:var(--bone2);box-shadow:4px 4px 0 var(--sig)}
+.btn-p:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sig)}
+.btn-s{background:var(--bone2);color:var(--ink)}
+.btn-s:hover{background:var(--tcau)}
+.bar{display:flex;height:16px;border:2px solid var(--ink);background:var(--bone2);overflow:hidden}
+.grow{transform-origin:left;animation:grow 1s cubic-bezier(.2,.8,.2,1) both .6s}
+.app a:focus-visible,.app button:focus-visible{outline:3px solid var(--cau);outline-offset:2px}
+.rise{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.55s}
+tbody tr{animation:rise .5s cubic-bezier(.2,.8,.2,1) both}
+tbody tr:nth-child(1){animation-delay:.6s}tbody tr:nth-child(2){animation-delay:.68s}tbody tr:nth-child(3){animation-delay:.76s}tbody tr:nth-child(4){animation-delay:.84s}tbody tr:nth-child(5){animation-delay:.92s}tbody tr:nth-child(6){animation-delay:1s}tbody tr:nth-child(7){animation-delay:1.08s}tbody tr:nth-child(8){animation-delay:1.16s}
+@keyframes rise{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@media (prefers-reduced-motion:reduce){.app *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="app">
+
+<header class="top">
+  <div style="display:flex;align-items:center;gap:28px">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px" aria-label="Drawbridge home">
+      <svg width="30" height="30" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M4 33V11h6V6h5v5h6V6h5v5h6V33z" fill="#F7F4EC" stroke="#0F1412" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 33V24a5 5 0 0 1 10 0V33z" fill="#FF5B1F" stroke="#0F1412" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      <span class="disp" style="font-size:26px">Drawbridge</span>
+    </a>
+    <span class="lab" style="color:#565D56">Attack lab / inbox-assistant</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px">
+    <a class="btn btn-s" href="Trace.dc.html" style="min-height:44px">Live trace</a>
+    <a class="btn btn-s" href="Policy.dc.html" style="min-height:44px">Policy</a>
+  </div>
+</header>
+
+<div class="body">
+  <aside class="side" aria-label="Test setup">
+    <div>
+      <div class="lab" style="color:#565D56;margin-bottom:8px">Policy under test</div>
+      <div style="border:2px solid var(--ink);background:var(--bone2);padding:12px 14px"><div class="mono" style="font-size:14px">inbox-assistant</div><div class="lab" style="color:#565D56;margin-top:2px">policy.yml &middot; 4 rules</div></div>
+    </div>
+    <button class="btn btn-p">Run all tests</button>
+    <div>
+      <div class="lab" style="color:#565D56;margin-bottom:6px">Attack category</div>
+      <button class="cat sel"><span>All attacks</span><span class="mono" style="font-size:14px">40</span></button>
+      <button class="cat"><span>Direct injection</span><span class="mono" style="font-size:14px">10</span></button>
+      <button class="cat"><span>Hidden in a web page</span><span class="mono" style="font-size:14px">8</span></button>
+      <button class="cat"><span>Data exfiltration</span><span class="mono" style="font-size:14px">8</span></button>
+      <button class="cat"><span>Tool hijack</span><span class="mono" style="font-size:14px">8</span></button>
+      <button class="cat"><span>Multi-step</span><span class="mono" style="font-size:14px">6</span></button>
+    </div>
+    <div style="flex:1"></div>
+    <p style="margin:0;font-size:13px;line-height:19px;color:#565D56">Payloads use fictional domains (*.example). Nothing leaves the sandbox. Numbers here are sample data for the design.</p>
+  </aside>
+
+  <main class="main">
+    <div class="rise" style="display:flex;justify-content:space-between;align-items:flex-end">
+      <h1 class="disp" style="font-size:48px">40 attacks, 60 normal tasks</h1>
+      <span class="lab" style="color:#565D56">Last run: 2 minutes ago</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat rise d1" style="box-shadow:5px 5px 0 var(--clr)"><span class="lab" style="color:#17624A">Stopped</span><b>37 <span style="font-size:28px;color:#565D56">/ 40</span></b></div>
+      <div class="stat rise d2" style="box-shadow:5px 5px 0 var(--cau)"><span class="lab">Sent to a human</span><b>3</b></div>
+      <div class="stat rise d3" style="box-shadow:5px 5px 0 var(--ink)"><span class="lab">Missed</span><b>0</b></div>
+      <div class="stat rise d4" style="box-shadow:5px 5px 0 var(--sig)"><span class="lab" style="color:#B83400">False alarms</span><b>2 <span style="font-size:28px;color:#565D56">/ 60</span></b></div>
+    </div>
+
+    <div class="rise d5">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span class="lab">Normal tasks, 58 allowed, 2 asked first</span><span class="lab" style="color:#565D56">Calibration matters as much as blocking</span></div>
+      <div class="bar"><div class="grow" style="width:96.7%;background:#1F7A5A"></div><div style="width:3.3%;background:#F2C230"></div></div>
+    </div>
+
+    <table aria-label="Attack results">
+      <thead><tr><th>ID</th><th>Category</th><th>Hidden in</th><th>Outcome</th><th>Rule</th></tr></thead>
+      <tbody>
+        <tr><td class="mono">A-001</td><td>Direct injection</td><td>User message</td><td><span class="bdg ok">Stopped</span></td><td class="mono" style="font-size:13px">deny-egress-tainted</td></tr>
+        <tr><td class="mono">A-007</td><td>Hidden in a web page</td><td>White text on white</td><td><span class="bdg ok">Stopped</span></td><td class="mono" style="font-size:13px">deny-egress-tainted</td></tr>
+        <tr><td class="mono">A-014</td><td>Data exfiltration</td><td>Email footer</td><td><span class="bdg ok">Stopped</span></td><td class="mono" style="font-size:13px">no-forward-external</td></tr>
+        <tr><td class="mono">A-018</td><td>Data exfiltration</td><td>PDF comment</td><td><span class="bdg ask">Sent to a human</span></td><td class="mono" style="font-size:13px">ask-large-send</td></tr>
+        <tr><td class="mono">A-023</td><td>Tool hijack</td><td>Calendar invite</td><td><span class="bdg ok">Stopped</span></td><td class="mono" style="font-size:13px">deny-shell-tainted</td></tr>
+        <tr><td class="mono">A-027</td><td>Tool hijack</td><td>Search result</td><td><span class="bdg ask">Sent to a human</span></td><td class="mono" style="font-size:13px">ask-delete</td></tr>
+        <tr><td class="mono">A-031</td><td>Multi-step</td><td>Email chain</td><td><span class="bdg ok">Stopped</span></td><td class="mono" style="font-size:13px">deny-egress-tainted</td></tr>
+        <tr><td class="mono">A-036</td><td>Multi-step</td><td>Web page</td><td><span class="bdg ask">Sent to a human</span></td><td class="mono" style="font-size:13px">ask-large-send</td></tr>
+      </tbody>
+    </table>
+  </main>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>

