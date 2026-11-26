@@ -124,38 +124,38 @@ export function TracePage() {
             </div>
           ) : (
             filteredRuns.map((run) => {
-            const isSel = activeRun?.id === run.id;
-            const statusBdg =
-              run.summary.status === "blocked"
-                ? { cls: "no", label: "Blocked" }
-                : run.summary.status === "asked"
-                  ? { cls: "ask", label: "Asked" }
-                  : { cls: "ok", label: "Clean" };
-            return (
-              <button
-                key={run.id}
-                type="button"
-                className={`run-btn${isSel ? " sel" : ""}`}
-                onClick={() => {
-                  setSelectedRunId(run.id);
-                  setSelectedStepId(null);
-                }}
-              >
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  <b style={{ fontWeight: 600 }}>{run.id}</b>
-                  <span
-                    className={`bdg ${statusBdg.cls}`}
-                    style={{ fontSize: 10, padding: "2px 6px" }}
-                  >
-                    {statusBdg.label}
-                  </span>
-                </div>
-                <div style={{ color: "var(--stone)", fontSize: 14 }}>
-                  {run.agent} &middot; {run.steps.length} steps
-                </div>
-              </button>
-            );
-          })
+              const isSel = activeRun?.id === run.id;
+              const statusBdg =
+                run.summary.status === "blocked"
+                  ? { cls: "no", label: "Blocked" }
+                  : run.summary.status === "asked"
+                    ? { cls: "ask", label: "Asked" }
+                    : { cls: "ok", label: "Clean" };
+              return (
+                <button
+                  key={run.id}
+                  type="button"
+                  className={`run-btn${isSel ? " sel" : ""}`}
+                  onClick={() => {
+                    setSelectedRunId(run.id);
+                    setSelectedStepId(null);
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between" }}>
+                    <b style={{ fontWeight: 600 }}>{run.id}</b>
+                    <span
+                      className={`bdg ${statusBdg.cls}`}
+                      style={{ fontSize: 10, padding: "2px 6px" }}
+                    >
+                      {statusBdg.label}
+                    </span>
+                  </div>
+                  <div style={{ color: "var(--stone)", fontSize: 14 }}>
+                    {run.agent} &middot; {run.steps.length} steps
+                  </div>
+                </button>
+              );
+            })
           )}
           <div style={{ flex: 1 }} />
           <div
@@ -258,9 +258,8 @@ export function TracePage() {
                 >
                   {step.decision ? (
                     <span
-                      className={`bdg ${
-                        isDeny ? "no" : isAsk ? "ask" : "ok"
-                      }`}
+                      className={`bdg ${isDeny ? "no" : isAsk ? "ask" : "ok"
+                        }`}
                     >
                       {isDeny ? "Blocked" : isAsk ? "Asked" : "Allowed"}
                     </span>
@@ -353,13 +352,12 @@ export function TracePage() {
                       {activeStep.tool}
                     </span>
                     <span
-                      className={`bdg ${
-                        decision?.decision === "deny"
-                          ? "no"
-                          : decision?.decision === "ask"
-                            ? "ask"
-                            : "ok"
-                      }`}
+                      className={`bdg ${decision?.decision === "deny"
+                        ? "no"
+                        : decision?.decision === "ask"
+                          ? "ask"
+                          : "ok"
+                        }`}
                     >
                       {decision?.decision ?? "allow"}
                     </span>

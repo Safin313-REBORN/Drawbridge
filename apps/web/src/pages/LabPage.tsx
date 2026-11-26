@@ -113,7 +113,7 @@ export function LabPage() {
                 cat === "All"
                   ? labReport.totals.attacks
                   : labReport.byCategory.find((c) => c.category === cat)
-                      ?.total ?? 0;
+                    ?.total ?? 0;
               return (
                 <button
                   key={cat}
@@ -262,13 +262,12 @@ export function LabPage() {
                     <td>{row.hiddenIn}</td>
                     <td>
                       <span
-                        className={`bdg ${
-                          row.decision === "deny"
-                            ? "ok"
-                            : row.decision === "ask"
-                              ? "ask"
-                              : "no"
-                        }`}
+                        className={`bdg ${row.decision === "deny"
+                          ? "ok"
+                          : row.decision === "ask"
+                            ? "ask"
+                            : "no"
+                          }`}
                       >
                         {row.outcomeLabel}
                       </span>

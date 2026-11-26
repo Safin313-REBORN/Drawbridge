@@ -45,8 +45,8 @@ export function CookiePolicyPage() {
             </li>
             <li>
               <strong>Data deletion:</strong> Clear your browser site data at any time to remove these keys, or email{" "}
-              <a href="mailto:security@drawbridge.example" style={{ textDecoration: "underline" }}>
-                security@drawbridge.example
+              <a href="mailto:251-15-858@diu.edu.bd" style={{ textDecoration: "underline" }}>
+                251-15-858@diu.edu.bd
               </a>.
             </li>
           </ul>

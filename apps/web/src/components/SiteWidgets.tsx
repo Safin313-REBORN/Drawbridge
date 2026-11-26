@@ -299,9 +299,13 @@ export function FloatingContactButton() {
                   Send message
                 </button>
                 <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--stone)" }}>
-                  Or email{" "}
-                  <a href="mailto:security@drawbridge.example" style={{ textDecoration: "underline" }}>
-                    security@drawbridge.example
+                  Email{" "}
+                  <a href="mailto:251-15-858@diu.edu.bd" style={{ textDecoration: "underline" }}>
+                    251-15-858@diu.edu.bd
+                  </a>{" "}
+                  &middot; Phone{" "}
+                  <a href="tel:+8801763609992" style={{ textDecoration: "underline" }}>
+                    +8801763609992
                   </a>
                 </p>
               </form>

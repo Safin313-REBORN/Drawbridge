@@ -223,12 +223,15 @@ select:focus-visible {
 .k {
   color: var(--tclr);
 }
+
 .s {
   color: var(--tcau);
 }
+
 .c {
   color: var(--mute);
 }
+
 .r {
   color: var(--tsig);
 }
@@ -422,7 +425,7 @@ select:focus-visible {
   gap: 40px;
 }
 
-.cols3 > div {
+.cols3>div {
   flex: 1 1 260px;
   min-width: 0;
 }
@@ -441,11 +444,11 @@ select:focus-visible {
   gap: 20px;
 }
 
-.tl > div {
+.tl>div {
   position: relative;
 }
 
-.tl > div:before {
+.tl>div:before {
   content: "";
   position: absolute;
   left: -37px;
@@ -457,7 +460,7 @@ select:focus-visible {
   border: 2px solid var(--ink);
 }
 
-.tl > div.bad:before {
+.tl>div.bad:before {
   background: var(--sig);
 }
 
@@ -790,14 +793,20 @@ select:focus-visible {
 }
 
 @keyframes loading-slide {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(300%); }
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(300%);
+  }
 }
 
 @media (max-width: 768px) {
   .mobile-menu-btn {
     display: inline-flex;
   }
+
   .nav-links {
     display: none;
     width: 100%;
@@ -805,9 +814,11 @@ select:focus-visible {
     gap: 8px;
     padding-top: 8px;
   }
+
   .nav-links.open {
     display: flex;
   }
+
   .cookie-banner {
     right: 16px;
     bottom: 76px;
@@ -815,6 +826,7 @@ select:focus-visible {
 }
 
 @media print {
+
   .sticky-nav,
   .top,
   .floating-dock,
@@ -826,6 +838,7 @@ select:focus-visible {
   .btn {
     display: none !important;
   }
+
   body,
   .pg,
   .app {
@@ -927,7 +940,7 @@ select:focus-visible {
   gap: 0;
 }
 
-.lin > div {
+.lin>div {
   border: 2px solid var(--ink);
   padding: 10px 14px;
   background: var(--bone);
@@ -937,7 +950,7 @@ select:focus-visible {
   gap: 10px;
 }
 
-.lin > i {
+.lin>i {
   display: block;
   width: 2px;
   height: 14px;
@@ -1159,11 +1172,25 @@ td {
   animation: rise 0.7s var(--ease) both;
 }
 
-.d1 { animation-delay: 0.1s; }
-.d2 { animation-delay: 0.2s; }
-.d3 { animation-delay: 0.3s; }
-.d4 { animation-delay: 0.45s; }
-.d5 { animation-delay: 0.55s; }
+.d1 {
+  animation-delay: 0.1s;
+}
+
+.d2 {
+  animation-delay: 0.2s;
+}
+
+.d3 {
+  animation-delay: 0.3s;
+}
+
+.d4 {
+  animation-delay: 0.45s;
+}
+
+.d5 {
+  animation-delay: 0.55s;
+}
 
 .slide {
   animation: slide 0.6s var(--ease) both 1.1s;
@@ -1187,6 +1214,7 @@ td {
     opacity: 0;
     transform: translateY(24px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -1198,6 +1226,7 @@ td {
     opacity: 0;
     transform: translateX(30px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -1209,10 +1238,12 @@ td {
     opacity: 0;
     transform: scale(2.4) rotate(-14deg);
   }
+
   60% {
     opacity: 1;
     transform: scale(0.94) rotate(-4deg);
   }
+
   100% {
     opacity: 1;
     transform: scale(1) rotate(-4deg);
@@ -1223,15 +1254,19 @@ td {
   from {
     transform: translateX(0);
   }
+
   to {
     transform: translateX(-50%);
   }
 }
 
 @keyframes nudge {
-  0%, 100% {
+
+  0%,
+  100% {
     transform: translateX(0);
   }
+
   50% {
     transform: translateX(16px);
   }
@@ -1247,6 +1282,7 @@ td {
   from {
     transform: scaleX(0);
   }
+
   to {
     transform: scaleX(1);
   }
@@ -1261,6 +1297,7 @@ td {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {
@@ -1274,21 +1311,26 @@ td {
   .trace-body {
     grid-template-columns: 1fr;
   }
+
   .trace-side {
     border-right: none;
     border-bottom: 2px solid var(--ink);
   }
+
   .insp {
     border-left: none;
     border-top: 2px solid var(--ink);
   }
+
   .lab-body {
     grid-template-columns: 1fr;
   }
+
   .lab-side {
     border-right: none;
     border-bottom: 2px solid var(--ink);
   }
+
   .policy-body {
     grid-template-columns: 1fr;
   }
@@ -1299,21 +1341,27 @@ td {
     padding-top: 72px;
     padding-bottom: 72px;
   }
+
   .split {
     gap: 36px;
   }
+
   .arr {
     display: none;
   }
+
   .node {
     margin-bottom: 12px;
   }
+
   .stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
   .diff-grid {
     grid-template-columns: 1fr;
   }
+
   .tcard {
     width: 100%;
     margin-top: 16px;
@@ -1324,14 +1372,17 @@ td {
   .stats {
     grid-template-columns: 1fr;
   }
+
   .row {
     grid-template-columns: 64px minmax(0, 1fr) 20px minmax(0, 1fr) 56px;
     gap: 6px;
     padding: 10px 8px;
   }
+
   .top {
     padding: 10px 16px;
   }
+
   .trace-center,
   .lab-main,
   .right {
