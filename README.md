@@ -4,7 +4,9 @@ An open-source firewall that stops AI agents from obeying hidden instructions in
 
 Built for **GenHacks 2026** (Track: AI, Agentic Systems, Cybersecurity, and Dev Tools).
 
-**Live Demo:** https://drawbridge-three.vercel.app
+**Live Demo:** https://drawbridge-three.vercel.app  
+**Demo Video:** https://github.com/Safin313-REBORN/Drawbridge/blob/main/apps/video/out/drawbridge-demo.mp4  
+**Pitch Deck (PPTX):** https://github.com/Safin313-REBORN/Drawbridge/blob/main/drawbridge-pitch.pptx
 
 ## What it does
 
