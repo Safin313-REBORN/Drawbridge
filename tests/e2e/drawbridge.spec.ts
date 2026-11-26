@@ -48,7 +48,6 @@ test.describe("Drawbridge E2E", () => {
 
     const editor = page.getByTestId("policy-editor");
     const current = await editor.inputValue();
-    // Change deny-egress-tainted to allow so dry-run detects changes
     const modified = current.replace(
       "deny: [send_email, http_post, forward_email]",
       "ask: [send_email, http_post, forward_email]"
@@ -70,6 +69,25 @@ test.describe("Drawbridge E2E", () => {
           () => document.documentElement.scrollWidth > window.innerWidth
         );
         expect(overflow, `Overflow at ${width}px on ${route}`).toBe(false);
+      }
+    }
+  });
+
+  test("Every internal link resolves cleanly on all pages", async ({ page }) => {
+    for (const route of ["/", "/trace", "/lab", "/policy"]) {
+      await page.goto(route);
+      const hrefs = await page.locator("a[href]").evaluateAll((els) =>
+        els.map((el) => el.getAttribute("href")).filter(Boolean)
+      );
+      for (const href of hrefs) {
+        if (!href) continue;
+        if (href.startsWith("#")) {
+          const target = page.locator(href);
+          await expect(target, `Missing anchor ${href} on ${route}`).toHaveCount(1);
+        } else if (href.startsWith("/")) {
+          const res = await page.request.get(href);
+          expect(res.status(), `Broken link ${href} on ${route}`).toBe(200);
+        }
       }
     }
   });
