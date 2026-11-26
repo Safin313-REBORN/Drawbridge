@@ -20,7 +20,7 @@ export function PrivacyPage() {
           Back to home
         </Link>
       </header>
-      <main className="wrap" style={{ paddingTop: 64, paddingBottom: 96, maxWidth: 820 }}>
+      <main id="main-content" className="wrap" style={{ paddingTop: 64, paddingBottom: 96, maxWidth: 820 }}>
         <div className="chip" style={{ marginBottom: 20 }}>
           <span className="lab">Privacy Policy</span>
         </div>

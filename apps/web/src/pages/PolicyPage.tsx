@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { DEFAULT_POLICY_YAML, runAttackLab } from "@drawbridge/attacks";
 import { evaluatePolicy, parsePolicy, tryParsePolicy } from "@drawbridge/core";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { ConfirmModal } from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 function decisionBadge(decision: "allow" | "ask" | "deny") {
@@ -22,6 +23,10 @@ export function PolicyPage() {
   } = useDrawbridge();
   const [activeTab, setActiveTab] = useState<"policy" | "contacts">("policy");
   const [dryRunTick, setDryRunTick] = useState(0);
+  const [savedBanner, setSavedBanner] = useState(false);
+  const [confirmRevertOpen, setConfirmRevertOpen] = useState(false);
+  const [providerKey, setProviderKey] = useState("");
+  const [showKey, setShowKey] = useState(false);
 
   const validation = useMemo(() => tryParsePolicy(policyYaml), [policyYaml]);
   const hasUnsaved = policyYaml !== savedPolicyYaml;
@@ -207,6 +212,29 @@ export function PolicyPage() {
                   ))}
                 </ul>
               )}
+              <div style={{ marginTop: 28, paddingTop: 20, borderTop: "1px solid var(--stone)" }}>
+                <label htmlFor="local-provider-key" className="lab" style={{ display: "block", color: "var(--mute)", marginBottom: 8 }}>
+                  Optional local provider key (never stored or sent from browser)
+                </label>
+                <div style={{ display: "flex", gap: 8 }}>
+                  <input
+                    id="local-provider-key"
+                    type={showKey ? "text" : "password"}
+                    className="field-input"
+                    value={providerKey}
+                    onChange={(e) => setProviderKey(e.target.value)}
+                    placeholder="Optional key..."
+                  />
+                  <button
+                    type="button"
+                    className="btn btn-s"
+                    onClick={() => setShowKey((v) => !v)}
+                    aria-pressed={showKey}
+                  >
+                    {showKey ? "Hide" : "Show"}
+                  </button>
+                </div>
+              </div>
             </div>
           )}
 
@@ -232,7 +260,7 @@ export function PolicyPage() {
                 type="button"
                 className="btn btn-s"
                 style={{ minHeight: 48 }}
-                onClick={revertPolicy}
+                onClick={() => setConfirmRevertOpen(true)}
               >
                 Revert
               </button>
@@ -240,7 +268,12 @@ export function PolicyPage() {
                 type="button"
                 className="btn btn-sig"
                 style={{ minHeight: 48 }}
-                onClick={savePolicy}
+                onClick={() => {
+                  if (savePolicy()) {
+                    setSavedBanner(true);
+                    setTimeout(() => setSavedBanner(false), 3000);
+                  }
+                }}
                 disabled={!validation.ok}
                 data-testid="save-policy-btn"
               >
@@ -248,9 +281,24 @@ export function PolicyPage() {
               </button>
             </span>
           </div>
+          {savedBanner && (
+            <div
+              role="status"
+              style={{
+                padding: "10px 22px",
+                background: "var(--tclr)",
+                color: "var(--clrt)",
+                borderTop: "2px solid var(--clr)",
+                fontFamily: "var(--font-mono)",
+                fontSize: 13,
+              }}
+            >
+              Policy saved and applied to Live Trace and Attack Lab.
+            </div>
+          )}
         </section>
 
-        <section className="right" aria-label="Dry-run against past runs">
+        <section id="main-content" className="right" aria-label="Dry-run against past runs">
           <div
             className="rise"
             style={{
@@ -383,6 +431,17 @@ export function PolicyPage() {
           </p>
         </section>
       </div>
+      <ConfirmModal
+        open={confirmRevertOpen}
+        title="Revert policy changes?"
+        message="Discard your unsaved edits in policy.yml and restore the last saved policy."
+        confirmLabel="Revert"
+        onCancel={() => setConfirmRevertOpen(false)}
+        onConfirm={() => {
+          revertPolicy();
+          setConfirmRevertOpen(false);
+        }}
+      />
     </div>
   );
 }

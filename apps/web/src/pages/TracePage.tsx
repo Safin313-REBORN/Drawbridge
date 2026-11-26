@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { ConfirmModal, CopyButton } from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 export function TracePage() {
@@ -8,6 +9,7 @@ export function TracePage() {
   const [filter, setFilter] = useState<"all" | "blocked" | "asked">("all");
   const [selectedRunId, setSelectedRunId] = useState<string>("Run #42");
   const [selectedStepId, setSelectedStepId] = useState<string | null>(null);
+  const [confirmApproveOpen, setConfirmApproveOpen] = useState(false);
 
   const filteredRuns = useMemo(() => {
     if (filter === "all") return runs;
@@ -98,6 +100,9 @@ export function TracePage() {
               <span className="lab" style={{ color: "var(--stone)" }}>
                 Loading runs...
               </span>
+              <div className="loading-bar" style={{ marginTop: 10 }}>
+                <div className="loading-bar-inner" />
+              </div>
             </div>
           ) : filteredRuns.length === 0 ? (
             <div className="card" style={{ padding: 16 }}>
@@ -157,7 +162,7 @@ export function TracePage() {
           </div>
         </aside>
 
-        <main className="trace-center">
+        <main id="main-content" className="trace-center">
           <div
             className="rise"
             style={{
@@ -363,10 +368,19 @@ export function TracePage() {
           {decision?.matchedRule && (
             <div>
               <div
-                className="lab"
-                style={{ color: "var(--stone)", marginBottom: 8 }}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 8,
+                }}
               >
-                Rule that fired
+                <span className="lab" style={{ color: "var(--stone)" }}>
+                  Rule that fired
+                </span>
+                <CopyButton
+                  text={`${decision.matchedRule.action}: ${decision.matchedRule.tools.join(", ")}${decision.matchedRule.when ? `\nwhen: ${decision.matchedRule.when}` : ""}`}
+                />
               </div>
               <pre className="insp-code">
                 <span className="k">{decision.matchedRule.action}:</span>{" "}
@@ -383,7 +397,7 @@ export function TracePage() {
               <button
                 type="button"
                 className="btn btn-s"
-                onClick={() => approveStepOnce(activeRun.id, activeStep.id)}
+                onClick={() => setConfirmApproveOpen(true)}
               >
                 Approve once
               </button>
@@ -414,6 +428,19 @@ export function TracePage() {
           </p>
         </aside>
       </div>
+      <ConfirmModal
+        open={confirmApproveOpen}
+        title="Approve this step once?"
+        message={`This allows ${activeStep?.tool ?? "the tool"} to run once for ${activeRun?.id ?? "this run"} without changing the saved policy.`}
+        confirmLabel="Approve once"
+        onCancel={() => setConfirmApproveOpen(false)}
+        onConfirm={() => {
+          if (activeRun && activeStep) {
+            approveStepOnce(activeRun.id, activeStep.id);
+          }
+          setConfirmApproveOpen(false);
+        }}
+      />
     </div>
   );
 }

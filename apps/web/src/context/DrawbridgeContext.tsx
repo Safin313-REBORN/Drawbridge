@@ -12,6 +12,9 @@ import {
 } from "@drawbridge/demo-agent";
 
 interface DrawbridgeContextValue {
+  theme: "light" | "dark";
+  toggleTheme: () => void;
+  utm: Record<string, string>;
   guardEnabled: boolean;
   toggleGuard: () => void;
   heroRun: RunAgentResult | null;
@@ -32,6 +35,31 @@ interface DrawbridgeContextValue {
 const DrawbridgeContext = createContext<DrawbridgeContextValue | null>(null);
 
 export function DrawbridgeProvider({ children }: { children: React.ReactNode }) {
+  const [theme, setTheme] = useState<"light" | "dark">(() => {
+    try {
+      return localStorage.getItem("drawbridge_theme") === "dark" ? "dark" : "light";
+    } catch {
+      return "light";
+    }
+  });
+  const [utm] = useState<Record<string, string>>(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const captured: Record<string, string> = {};
+      for (const key of ["utm_source", "utm_medium", "utm_campaign"]) {
+        const val = params.get(key);
+        if (val) captured[key] = val;
+      }
+      if (Object.keys(captured).length > 0) {
+        sessionStorage.setItem("drawbridge_utm", JSON.stringify(captured));
+        return captured;
+      }
+      const saved = sessionStorage.getItem("drawbridge_utm");
+      return saved ? (JSON.parse(saved) as Record<string, string>) : {};
+    } catch {
+      return {};
+    }
+  });
   const [guardEnabled, setGuardEnabled] = useState(true);
   const [savedPolicyYaml, setSavedPolicyYaml] = useState(DEFAULT_POLICY_YAML);
   const [policyYaml, setPolicyYaml] = useState(DEFAULT_POLICY_YAML);
@@ -44,6 +72,23 @@ export function DrawbridgeProvider({ children }: { children: React.ReactNode }) 
 
   const announce = useCallback((msg: string) => {
     setAnnouncement(msg);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme);
+    try {
+      localStorage.setItem("drawbridge_theme", theme);
+    } catch {
+      // ignore storage errors
+    }
+  }, [theme]);
+
+  const toggleTheme = useCallback(() => {
+    setTheme((prev) => {
+      const next = prev === "light" ? "dark" : "light";
+      setAnnouncement(`Switched to ${next} mode.`);
+      return next;
+    });
   }, []);
 
   // Re-run hero inbox assistant whenever guardEnabled or savedPolicyYaml changes
@@ -171,6 +216,9 @@ export function DrawbridgeProvider({ children }: { children: React.ReactNode }) 
   return (
     <DrawbridgeContext.Provider
       value={{
+        theme,
+        toggleTheme,
+        utm,
         guardEnabled,
         toggleGuard,
         heroRun,

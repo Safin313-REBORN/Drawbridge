@@ -1,6 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ErrorBoundary } from "./components/ErrorBoundary.js";
+import { CookieBanner, FloatingContactButton, SkipLink } from "./components/SiteWidgets.js";
 import { DrawbridgeProvider } from "./context/DrawbridgeContext.js";
 import { LabPage } from "./pages/LabPage.js";
 import { LandingPage } from "./pages/LandingPage.js";
@@ -15,6 +16,7 @@ export function App() {
     <ErrorBoundary>
       <DrawbridgeProvider>
         <BrowserRouter>
+          <SkipLink />
           <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/trace" element={<TracePage />} />
@@ -24,6 +26,8 @@ export function App() {
             <Route path="/terms" element={<TermsPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          <CookieBanner />
+          <FloatingContactButton />
         </BrowserRouter>
       </DrawbridgeProvider>
     </ErrorBoundary>

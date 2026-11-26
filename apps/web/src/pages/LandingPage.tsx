@@ -1,11 +1,26 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo.js";
+import {
+  BackToTop,
+  CopyButton,
+  ScrollProgress,
+  SiteSearch,
+} from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 export function LandingPage() {
-  const { guardEnabled, toggleGuard, heroRun, runs, labReport, savedPolicyYaml } =
-    useDrawbridge();
+  const {
+    theme,
+    toggleTheme,
+    guardEnabled,
+    toggleGuard,
+    heroRun,
+    runs,
+    labReport,
+    savedPolicyYaml,
+  } = useDrawbridge();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const traceSteps = runs[0]?.steps ?? [];
 
@@ -21,45 +36,72 @@ export function LandingPage() {
 
   return (
     <div className="pg">
-      <header className="wrap nav">
-        <a
-          href="#top"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            color: "var(--ink)",
-          }}
-        >
-          <BrandLogo size={36} />
-          <span className="disp" style={{ fontSize: 30 }}>
-            Drawbridge
-          </span>
-        </a>
-        <nav aria-label="Primary" className="nav-links">
-          <a className="lab" href="#problem">
-            The problem
+      <ScrollProgress />
+      <header className="sticky-nav">
+        <div className="wrap nav">
+          <a
+            href="#top"
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              color: "var(--fg)",
+            }}
+          >
+            <BrandLogo size={36} />
+            <span className="disp" style={{ fontSize: 30 }}>
+              Drawbridge
+            </span>
           </a>
-          <a className="lab" href="#how">
-            How it works
-          </a>
-          <a className="lab" href="#lab">
-            Attack lab
-          </a>
-          <a className="lab" href="#policy">
-            Policy
-          </a>
-        </nav>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
-          <a className="btn btn-s" href="#sdk">
-            View code
-          </a>
-          <Link className="btn btn-p" to="/trace">
-            Open live demo
-          </Link>
+          <button
+            type="button"
+            className="btn btn-s mobile-menu-btn"
+            aria-expanded={menuOpen}
+            aria-controls="primary-nav"
+            onClick={() => setMenuOpen((v) => !v)}
+          >
+            {menuOpen ? "Close menu" : "Menu"}
+          </button>
+          <nav
+            id="primary-nav"
+            aria-label="Primary"
+            className={`nav-links${menuOpen ? " open" : ""}`}
+          >
+            <a className="lab" href="#problem" onClick={() => setMenuOpen(false)}>
+              The problem
+            </a>
+            <a className="lab" href="#how" onClick={() => setMenuOpen(false)}>
+              How it works
+            </a>
+            <a className="lab" href="#lab" onClick={() => setMenuOpen(false)}>
+              Attack lab
+            </a>
+            <a className="lab" href="#policy" onClick={() => setMenuOpen(false)}>
+              Policy
+            </a>
+            <a className="lab" href="#faq" onClick={() => setMenuOpen(false)}>
+              FAQ
+            </a>
+          </nav>
+          <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 10 }}>
+            <SiteSearch />
+            <button
+              type="button"
+              className="btn btn-s"
+              style={{ minHeight: 44, padding: "8px 14px", fontSize: 13 }}
+              onClick={toggleTheme}
+              aria-pressed={theme === "dark"}
+            >
+              {theme === "dark" ? "Light mode" : "Dark mode"}
+            </button>
+            <Link className="btn btn-p" to="/trace">
+              Open live demo
+            </Link>
+          </div>
         </div>
       </header>
 
+      <main id="main-content">
       <section className="wrap hero" id="top">
         <div style={{ flex: "1 1 520px", minWidth: 0 }}>
           <div className="chip rise" style={{ marginBottom: 28 }}>
@@ -993,10 +1035,17 @@ export function LandingPage() {
               }}
             >
               <div
-                className="lab"
-                style={{ color: "var(--mute)", marginBottom: 16 }}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  marginBottom: 16,
+                }}
               >
-                policy.yml
+                <span className="lab" style={{ color: "var(--mute)" }}>
+                  policy.yml
+                </span>
+                <CopyButton text={savedPolicyYaml} />
               </div>
               <pre className="code">{savedPolicyYaml}</pre>
             </div>
@@ -1045,10 +1094,19 @@ export function LandingPage() {
             }}
           >
             <div
-              className="lab"
-              style={{ color: "var(--mute)", marginBottom: 16 }}
+              style={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: 16,
+              }}
             >
-              agent.ts
+              <span className="lab" style={{ color: "var(--mute)" }}>
+                agent.ts
+              </span>
+              <CopyButton
+                text={`import { guard } from "@drawbridge/sdk";\n\nconst tools = guard(myTools, {\n  policy: policyYaml,\n});\n\nconst agent = createAgent({ tools });`}
+              />
             </div>
             <pre className="code">
               <span className="r">import</span> {"{ guard }"}{" "}
@@ -1063,6 +1121,42 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      <section className="wrap sec" id="faq" style={{ paddingTop: 0 }}>
+        <div className="chip" style={{ marginBottom: 20 }}>
+          <span className="lab">07 &mdash; FAQ</span>
+        </div>
+        <h2 className="disp" style={{ fontSize: "clamp(40px,4.8vw,68px)", marginBottom: 28 }}>
+          Common questions
+        </h2>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14, maxWidth: 820 }}>
+          <details className="faq-item">
+            <summary>Does Drawbridge make AI agents 100% immune?</summary>
+            <p style={{ margin: "12px 0 0", color: "var(--stone)" }}>
+              No. Drawbridge reduces prompt-injection risk by tracking untrusted origins and gating risky tool calls with deterministic rules, but it does not make agents immune to all attacks.
+            </p>
+          </details>
+          <details className="faq-item">
+            <summary>Does it require an internet connection or external API?</summary>
+            <p style={{ margin: "12px 0 0", color: "var(--stone)" }}>
+              No. The core taint engine, YAML policy evaluator, SDK, and Attack Lab run 100% offline in TypeScript.
+            </p>
+          </details>
+          <details className="faq-item">
+            <summary>How does taint tracking work?</summary>
+            <p style={{ margin: "12px 0 0", color: "var(--stone)" }}>
+              Inputs from outside the trust boundary (external emails, web pages, files) are labeled untrusted. Any model context built from them becomes tainted, and tool calls from that context inherit the taint lineage.
+            </p>
+          </details>
+          <details className="faq-item">
+            <summary>Can an LLM judge override a policy rule?</summary>
+            <p style={{ margin: "12px 0 0", color: "var(--stone)" }}>
+              Never. An optional judge can attach evidence to a trace, but deterministic policy rules always decide allow, ask, or deny.
+            </p>
+          </details>
+        </div>
+      </section>
+      </main>
 
       <footer className="dark" style={{ borderTop: "2px solid var(--ink)" }}>
         <div className="wrap" style={{ paddingTop: 112, paddingBottom: 48 }}>
@@ -1099,7 +1193,7 @@ export function LandingPage() {
             }}
           >
             <span className="lab" style={{ color: "var(--mute)" }}>
-              Made for GenHacks 2026 &middot; Open source
+              Made for GenHacks 2026 &middot; Open source &middot; Last updated: Nov 26, 2026
             </span>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
               <Link className="lab" to="/privacy" style={{ color: "var(--mute)" }}>
@@ -1115,6 +1209,7 @@ export function LandingPage() {
           </div>
         </div>
       </footer>
+      <BackToTop />
     </div>
   );
 }

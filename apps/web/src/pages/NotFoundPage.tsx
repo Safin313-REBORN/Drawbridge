@@ -26,6 +26,7 @@ export function NotFoundPage() {
         </div>
       </header>
       <main
+        id="main-content"
         className="wrap"
         style={{
           flex: 1,

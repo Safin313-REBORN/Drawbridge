@@ -1,5 +1,21 @@
 @import "./tokens.css";
 
+:root {
+  --bg: var(--bone);
+  --bg2: var(--bone2);
+  --fg: var(--ink);
+  --fg2: var(--ink2);
+  --fg-muted: var(--stone);
+}
+
+[data-theme="dark"] {
+  --bg: var(--ink);
+  --bg2: var(--ink2);
+  --fg: var(--bone2);
+  --fg2: var(--bone);
+  --fg-muted: var(--mute);
+}
+
 * {
   box-sizing: border-box;
 }
@@ -8,8 +24,8 @@ html,
 body {
   margin: 0;
   padding: 0;
-  background: var(--bone);
-  color: var(--ink);
+  background: var(--bg);
+  color: var(--fg);
   font-family: var(--font-body);
   overflow-x: clip;
 }
@@ -220,8 +236,8 @@ select:focus-visible {
 /* Landing Page */
 .pg {
   font-family: var(--font-body);
-  color: var(--ink);
-  background: var(--bone);
+  color: var(--fg);
+  background: var(--bg);
   font-size: 17px;
   line-height: 1.6;
   overflow-x: clip;
@@ -487,8 +503,8 @@ select:focus-visible {
   display: flex;
   flex-direction: column;
   font-family: var(--font-body);
-  color: var(--ink);
-  background: var(--bone);
+  color: var(--fg);
+  background: var(--bg);
   font-size: 16px;
   line-height: 1.5;
 }
@@ -498,6 +514,9 @@ select:focus-visible {
 }
 
 .top {
+  position: sticky;
+  top: 0;
+  z-index: 40;
   min-height: 64px;
   display: flex;
   flex-wrap: wrap;
@@ -507,6 +526,239 @@ select:focus-visible {
   padding: 10px 28px;
   border-bottom: 2px solid var(--ink);
   background: var(--bone2);
+  color: var(--ink);
+}
+
+.sticky-nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: var(--bg);
+  border-bottom: 2px solid var(--ink);
+}
+
+.nav-links a:hover {
+  text-decoration: underline;
+  text-underline-offset: 6px;
+}
+
+.mobile-menu-btn {
+  display: none;
+}
+
+/* Skip to content */
+.skip-link {
+  position: fixed;
+  left: -9999px;
+  top: 12px;
+  z-index: 100;
+  background: var(--ink);
+  color: var(--bone2);
+  padding: 12px 18px;
+  border: 2px solid var(--cau);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  text-decoration: none;
+}
+
+.skip-link:focus {
+  left: 12px;
+}
+
+/* Scroll progress */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  z-index: 60;
+  background: transparent;
+}
+
+.scroll-progress-bar {
+  height: 100%;
+  background: var(--sig);
+}
+
+/* Hover state for timeline steps */
+.st:hover {
+  border-color: var(--sig);
+}
+
+/* Site Search */
+.site-search {
+  position: relative;
+}
+
+.field-input {
+  width: 100%;
+  min-height: 48px;
+  padding: 10px 14px;
+  border: 2px solid var(--ink);
+  border-radius: 2px;
+  background: var(--bone2);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 15px;
+}
+
+.search-results {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  width: 280px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  background: var(--bone2);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow-sm);
+  z-index: 50;
+}
+
+.search-item {
+  width: 100%;
+  text-align: left;
+  padding: 10px 12px;
+  border: none;
+  border-bottom: 1px solid var(--steel);
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.search-item:hover {
+  background: var(--tcau);
+}
+
+/* Modals, Cookie Banner, Floating Widgets */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: rgba(15, 20, 18, 0.72);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.modal-card {
+  background: var(--bone2);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow-md);
+  padding: 28px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.cookie-banner {
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 70;
+  max-width: 420px;
+  background: var(--bone2);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  box-shadow: var(--shadow-sm);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.floating-contact {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 70;
+}
+
+.back-to-top {
+  position: fixed;
+  bottom: 76px;
+  right: 16px;
+  z-index: 70;
+}
+
+/* FAQ Accordion */
+.faq-item {
+  border: 2px solid var(--ink);
+  background: var(--bone2);
+  color: var(--ink);
+  padding: 16px 20px;
+}
+
+.faq-item summary {
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 18px;
+  min-height: 36px;
+}
+
+/* Loading animation */
+.loading-bar {
+  height: 6px;
+  background: var(--steel);
+  overflow: hidden;
+  border: 1px solid var(--ink);
+}
+
+.loading-bar-inner {
+  height: 100%;
+  width: 40%;
+  background: var(--sig);
+  animation: loading-slide 1.2s ease-in-out infinite;
+}
+
+@keyframes loading-slide {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(300%); }
+}
+
+@media (max-width: 768px) {
+  .mobile-menu-btn {
+    display: inline-flex;
+  }
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 8px;
+    padding-top: 8px;
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .cookie-banner {
+    right: 16px;
+    bottom: 76px;
+  }
+}
+
+@media print {
+  .sticky-nav,
+  .top,
+  .floating-contact,
+  .back-to-top,
+  .cookie-banner,
+  .scroll-progress,
+  .mqwrap,
+  .btn {
+    display: none !important;
+  }
+  body,
+  .pg,
+  .app {
+    background: white !important;
+    color: black !important;
+  }
 }
 
 /* Trace page */

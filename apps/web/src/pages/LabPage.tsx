@@ -138,7 +138,7 @@ export function LabPage() {
           </p>
         </aside>
 
-        <main className="lab-main">
+        <main id="main-content" className="lab-main">
           <div
             className="rise"
             style={{
