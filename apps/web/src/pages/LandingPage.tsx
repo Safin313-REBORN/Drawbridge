@@ -6,10 +6,15 @@ import {
   CopyButton,
   ScrollProgress,
   SiteSearch,
+  usePageMeta,
 } from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 export function LandingPage() {
+  usePageMeta(
+    "Drawbridge — Firewall for AI Agents",
+    "Open-source firewall that stops AI agents from obeying hidden instructions in untrusted text."
+  );
   const {
     theme,
     toggleTheme,
@@ -1193,7 +1198,7 @@ export function LandingPage() {
             }}
           >
             <span className="lab" style={{ color: "var(--mute)" }}>
-              Made for GenHacks 2026 &middot; Open source &middot; Last updated: Nov 26, 2026
+              &copy; 2026 Drawbridge &middot; GenHacks 2026 &middot; Open source &middot; Last updated: Nov 26, 2026
             </span>
             <div style={{ display: "flex", flexWrap: "wrap", gap: 20 }}>
               <Link className="lab" to="/privacy" style={{ color: "var(--mute)" }}>

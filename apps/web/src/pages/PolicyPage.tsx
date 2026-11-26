@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { DEFAULT_POLICY_YAML, runAttackLab } from "@drawbridge/attacks";
 import { evaluatePolicy, parsePolicy, tryParsePolicy } from "@drawbridge/core";
 import { BrandLogo } from "../components/BrandLogo.js";
-import { ConfirmModal } from "../components/SiteWidgets.js";
+import { ConfirmModal, usePageMeta } from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 function decisionBadge(decision: "allow" | "ask" | "deny") {
@@ -13,6 +13,10 @@ function decisionBadge(decision: "allow" | "ask" | "deny") {
 }
 
 export function PolicyPage() {
+  usePageMeta(
+    "Policy Editor — Drawbridge",
+    "Edit YAML policy rules, validate syntax, and dry-run changes against past agent runs."
+  );
   const {
     policyYaml,
     savedPolicyYaml,

@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { usePageMeta } from "../components/SiteWidgets.js";
 
 export function PrivacyPage() {
+  usePageMeta("Privacy Policy — Drawbridge", "Drawbridge runs locally in your browser and collects no personal data.");
   return (
     <div className="app">
       <header className="top">

@@ -2,6 +2,16 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ATTACK_PAYLOADS } from "@drawbridge/attacks";
 
+export function usePageMeta(title: string, description: string) {
+  useEffect(() => {
+    document.title = title;
+    const meta = document.querySelector('meta[name="description"]');
+    if (meta) {
+      meta.setAttribute("content", description);
+    }
+  }, [title, description]);
+}
+
 export function SkipLink({ targetId = "main-content" }: { targetId?: string }) {
   return (
     <a href={`#${targetId}`} className="skip-link">
@@ -263,6 +273,12 @@ export function FloatingContactButton() {
                 <button type="submit" className="btn btn-p">
                   Send message
                 </button>
+                <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--stone)" }}>
+                  Or email{" "}
+                  <a href="mailto:security@drawbridge.example" style={{ textDecoration: "underline" }}>
+                    security@drawbridge.example
+                  </a>
+                </p>
               </form>
             )}
           </div>

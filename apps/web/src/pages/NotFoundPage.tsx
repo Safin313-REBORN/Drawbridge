@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { usePageMeta } from "../components/SiteWidgets.js";
 
 export function NotFoundPage() {
+  usePageMeta("404 — Drawbridge", "The requested page could not be found.");
   return (
     <div className="app">
       <header className="top">

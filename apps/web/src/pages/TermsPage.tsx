@@ -1,8 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { usePageMeta } from "../components/SiteWidgets.js";
 
 export function TermsPage() {
+  usePageMeta("Terms of Use — Drawbridge", "Drawbridge open-source MIT license terms and threat model notice.");
   return (
     <div className="app">
       <header className="top">

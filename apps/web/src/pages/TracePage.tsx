@@ -1,10 +1,14 @@
 import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { BrandLogo } from "../components/BrandLogo.js";
-import { ConfirmModal, CopyButton } from "../components/SiteWidgets.js";
+import { ConfirmModal, CopyButton, usePageMeta } from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 export function TracePage() {
+  usePageMeta(
+    "Live Trace — Drawbridge",
+    "Inspect agent tool calls, taint origin lineage, and deterministic policy decisions."
+  );
   const { runs, approveStepOnce, alwaysBlockTool } = useDrawbridge();
   const [filter, setFilter] = useState<"all" | "blocked" | "asked">("all");
   const [selectedRunId, setSelectedRunId] = useState<string>("Run #42");

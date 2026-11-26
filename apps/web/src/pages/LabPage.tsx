@@ -2,6 +2,7 @@ import React, { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { AttackCategory } from "@drawbridge/attacks";
 import { BrandLogo } from "../components/BrandLogo.js";
+import { usePageMeta } from "../components/SiteWidgets.js";
 import { useDrawbridge } from "../context/DrawbridgeContext.js";
 
 const CATEGORIES: Array<"All" | AttackCategory> = [
@@ -14,6 +15,10 @@ const CATEGORIES: Array<"All" | AttackCategory> = [
 ];
 
 export function LabPage() {
+  usePageMeta(
+    "Attack Lab — Drawbridge",
+    "Replay 40 prompt-injection payloads and 60 benign tasks against your Drawbridge policy."
+  );
   const { labReport, rerunLab } = useDrawbridge();
   const [selectedCategory, setSelectedCategory] = useState<
     "All" | AttackCategory
