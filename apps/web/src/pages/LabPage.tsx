@@ -50,9 +50,9 @@ export function LabPage() {
               Drawbridge
             </span>
           </Link>
-          <span className="lab" style={{ color: "var(--stone)" }}>
-            Attack lab / {labReport.policyName}
-          </span>
+          <nav aria-label="Breadcrumb" className="lab" style={{ color: "var(--stone)" }}>
+            <Link to="/">Home</Link> / Attack lab / {labReport.policyName}
+          </nav>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <Link className="btn btn-s" to="/trace" style={{ minHeight: 48 }}>

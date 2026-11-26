@@ -1,0 +1,11 @@
+# Drawbridge
+
+> Open-source firewall that stops AI agents from obeying hidden instructions in the web pages, emails, and files they read.
+
+## Core Pages
+- [Landing](https://drawbridge-three.vercel.app/): Overview, interactive Guard on/off demo, architecture, and SDK quick start.
+- [Live Trace](https://drawbridge-three.vercel.app/trace): Step-by-step agent run timeline, taint origin lineage, and deterministic rule explanations.
+- [Attack Lab](https://drawbridge-three.vercel.app/lab): 40 prompt-injection payloads across 5 categories and 60 benign calibration tasks.
+- [Policy Editor](https://drawbridge-three.vercel.app/policy): Editable YAML policy with Zod validation and dry-run replay against past runs.
+- [Privacy Policy](https://drawbridge-three.vercel.app/privacy): Local-only execution and storage notice.
+- [Terms of Use](https://drawbridge-three.vercel.app/terms): MIT open-source license and threat model notice.

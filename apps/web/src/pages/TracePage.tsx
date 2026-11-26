@@ -48,10 +48,10 @@ export function TracePage() {
               Drawbridge
             </span>
           </Link>
-          <span className="lab" style={{ color: "var(--stone)" }}>
-            Runs / {activeRun?.agent ?? "inbox-assistant"} /{" "}
+          <nav aria-label="Breadcrumb" className="lab" style={{ color: "var(--stone)" }}>
+            <Link to="/">Home</Link> / Runs / {activeRun?.agent ?? "inbox-assistant"} /{" "}
             {activeRun?.id ?? "Run #42"}
-          </span>
+          </nav>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 14, flexWrap: "wrap" }}>
           <span className="bdg no">

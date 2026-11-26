@@ -96,4 +96,23 @@ test.describe("Drawbridge E2E", () => {
     await page.goto("/this-route-does-not-exist");
     await expect(page.getByText("This gate does not exist.")).toBeVisible();
   });
+
+  test("Zero console errors and one H1 per page across all routes", async ({
+    page,
+  }) => {
+    const errors: string[] = [];
+    page.on("console", (msg) => {
+      if (msg.type() === "error") errors.push(msg.text());
+    });
+    page.on("pageerror", (err) => {
+      errors.push(err.message);
+    });
+
+    for (const route of ["/", "/trace", "/lab", "/policy", "/privacy", "/terms"]) {
+      await page.goto(route);
+      await expect(page.locator("h1")).toHaveCount(1);
+    }
+
+    expect(errors).toEqual([]);
+  });
 });

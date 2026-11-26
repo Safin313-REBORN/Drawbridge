@@ -133,9 +133,9 @@ export function PolicyPage() {
               Drawbridge
             </span>
           </Link>
-          <span className="lab" style={{ color: "var(--stone)" }}>
-            Policy / {validation.ok ? validation.policy.policy : "invalid"}
-          </span>
+          <nav aria-label="Breadcrumb" className="lab" style={{ color: "var(--stone)" }}>
+            <Link to="/">Home</Link> / Policy / {validation.ok ? validation.policy.policy : "invalid"}
+          </nav>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 12, flexWrap: "wrap" }}>
           <Link className="btn btn-s" to="/trace" style={{ minHeight: 48 }}>

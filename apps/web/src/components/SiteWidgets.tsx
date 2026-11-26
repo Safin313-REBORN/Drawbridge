@@ -9,6 +9,13 @@ export function usePageMeta(title: string, description: string) {
     if (meta) {
       meta.setAttribute("content", description);
     }
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.setAttribute(
+        "href",
+        `https://drawbridge-three.vercel.app${window.location.pathname}`
+      );
+    }
   }, [title, description]);
 }
 
