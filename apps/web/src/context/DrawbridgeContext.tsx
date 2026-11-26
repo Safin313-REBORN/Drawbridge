@@ -52,11 +52,19 @@ export function DrawbridgeProvider({ children }: { children: React.ReactNode }) 
     void runInboxAssistant({
       guardEnabled,
       policyYaml: savedPolicyYaml,
-    }).then((res) => {
-      if (!cancelled) {
-        setHeroRun(res);
-      }
-    });
+    })
+      .then((res) => {
+        if (!cancelled) {
+          setHeroRun(res);
+        }
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          setAnnouncement(
+            `Failed to run demo agent: ${err instanceof Error ? err.message : String(err)}`
+          );
+        }
+      });
     return () => {
       cancelled = true;
     };
@@ -65,11 +73,19 @@ export function DrawbridgeProvider({ children }: { children: React.ReactNode }) 
   // Re-generate real trace runs whenever savedPolicyYaml changes
   useEffect(() => {
     let cancelled = false;
-    void generateDefaultRuns(savedPolicyYaml).then((res) => {
-      if (!cancelled) {
-        setRuns(res);
-      }
-    });
+    void generateDefaultRuns(savedPolicyYaml)
+      .then((res) => {
+        if (!cancelled) {
+          setRuns(res);
+        }
+      })
+      .catch((err: unknown) => {
+        if (!cancelled) {
+          setAnnouncement(
+            `Failed to generate runs: ${err instanceof Error ? err.message : String(err)}`
+          );
+        }
+      });
     return () => {
       cancelled = true;
     };
