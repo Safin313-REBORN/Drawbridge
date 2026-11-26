@@ -4,6 +4,8 @@ An open-source firewall that stops AI agents from obeying hidden instructions in
 
 Built for **GenHacks 2026** (Track: AI, Agentic Systems, Cybersecurity, and Dev Tools).
 
+**Live Demo:** https://drawbridge-three.vercel.app
+
 ## What it does
 
 AI agents that read external text (emails, web pages, documents) are vulnerable to indirect prompt injection: an attacker hides instructions inside untrusted text, and the model executes them with the user's tool permissions.
