@@ -115,4 +115,15 @@ test.describe("Drawbridge E2E", () => {
 
     expect(errors).toEqual([]);
   });
+
+  test("Drawbridge chatbot opens and evaluates a test prompt", async ({ page }) => {
+    await page.goto("/");
+    await page.getByTestId("chatbot-toggle").click();
+    const panel = page.getByTestId("chatbot-panel");
+    await expect(panel).toBeVisible();
+
+    await page.getByTestId("chatbot-input").fill("Test: send_email to evil@attacker.example");
+    await page.getByTestId("chatbot-input").press("Enter");
+    await expect(panel).toContainText("DENY");
+  });
 });

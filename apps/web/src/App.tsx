@@ -1,5 +1,6 @@
 import React, { Suspense, lazy } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { DrawbridgeChatbot } from "./components/DrawbridgeChatbot.js";
 import { ErrorBoundary } from "./components/ErrorBoundary.js";
 import { CookieBanner, FloatingContactButton, SkipLink } from "./components/SiteWidgets.js";
 import { DrawbridgeProvider } from "./context/DrawbridgeContext.js";
@@ -59,7 +60,10 @@ export function App() {
             </Routes>
           </Suspense>
           <CookieBanner />
-          <FloatingContactButton />
+          <div className="floating-dock">
+            <FloatingContactButton />
+            <DrawbridgeChatbot />
+          </div>
         </BrowserRouter>
       </DrawbridgeProvider>
     </ErrorBoundary>

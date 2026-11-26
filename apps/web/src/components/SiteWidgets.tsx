@@ -196,7 +196,7 @@ export function FloatingContactButton() {
     <>
       <button
         type="button"
-        className="btn btn-p floating-contact"
+        className="btn btn-p"
         onClick={() => {
           setSubmitted(false);
           setError("");
